@@ -101,5 +101,19 @@ export default {
       leftDrawerOpen: this.$q.platform.is.desktop,
     };
   },
+  computed: {
+    isLoading() {
+      return this.$store.state.isLoading;
+    },
+  },
+  watch: {
+    isLoading(newValue) {
+      if (newValue) {
+        this.$q.loading.show();
+      } else {
+        this.$q.loading.hide();
+      }
+    },
+  },
 };
 </script>

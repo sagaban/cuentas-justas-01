@@ -12,7 +12,13 @@
       </li>
       <li>Strongly based on <a href="https://plittypie.com">SplittyPie</a></li>
       <li>
-        Currency exchange rate from <a href="https://www.amdoren.com/currency-api/">amdoren</a>
+        <a href="https://www.freeforexapi.com">
+          <img
+            alt="Free Forex API"
+            src="https://www.freeforexapi.com/Images/link.png"
+            height="20"
+          />
+        </a>
       </li>
     </ul>
   </div>

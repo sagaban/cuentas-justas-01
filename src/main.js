@@ -28,10 +28,17 @@ import {
   QSelect,
   QSeparator,
   QChip,
+  QAvatar,
+  Loading,
+  Notify,
 } from 'quasar';
 
 Vue.use(Quasar, {
-  config: {},
+  config: {
+    notify: {
+      position: 'top',
+    },
+  },
   components: {
     QLayout,
     QHeader,
@@ -51,9 +58,13 @@ Vue.use(Quasar, {
     QSelect,
     QSeparator,
     QChip,
+    QAvatar,
   },
   directives: {},
-  plugins: {},
+  plugins: {
+    Loading,
+    Notify,
+  },
   lang: lang,
 });
 

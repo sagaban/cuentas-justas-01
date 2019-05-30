@@ -120,6 +120,17 @@ export default {
       minParticipantAmount: MIN_PARTICIPANT_AMOUNT,
     };
   },
+  mounted() {
+    this.eventName = 'Viaje a Chile';
+    this.mainCurrency = { value: 'ARS', label: 'Peso Argentino' };
+    this.otherCurrencies = [
+      { value: 'USD', label: 'Dolar Estadounidense' },
+      { value: 'CLP', label: 'Peso Chileno' },
+    ];
+    this.participants = ['Santiago', 'Exe', 'Diego'];
+    this.participantsAmount = 3;
+    this.password = '123456';
+  },
   computed: {
     otherCurrenciesOptions() {
       const mainCurrency = this.mainCurrency;
@@ -142,17 +153,32 @@ export default {
       this.participantsAmount--;
     },
     onSubmit() {
-      this.$q.notify({
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'fas fa-check-circle',
-        message: 'Submitted',
-      });
+      this.$store
+        .dispatch('CREATE_EVENT', {
+          eventName: this.eventName,
+          mainCurrency: this.mainCurrency,
+          password: this.password,
+          otherCurrencies: this.otherCurrencies,
+          participants: this.participants,
+        })
+        .then(() => console.log('redirect'))
+        .catch(e => {
+          this.$store.commit('SET_IS_LOADING', false);
+          this.$q.notify({
+            color: 'red',
+            textColor: 'white',
+            icon: 'error',
+            message: 'El evento no pudo ser creado: ' + e,
+          });
+        });
     },
     onReset() {
       this.eventName = null;
       this.mainCurrency = null;
+      this.password = null;
       this.otherCurrencies = [];
+      this.participants = [];
+      this.participantsAmount = MIN_PARTICIPANT_AMOUNT;
     },
   },
 };
