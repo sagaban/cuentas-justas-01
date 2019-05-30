@@ -1,0 +1,18 @@
+[
+  {
+    "value": "ARS",
+    "label": "Peso Argentino"
+  },
+  {
+    "value": "USD",
+    "label": "Dolar Estadounidense"
+  },
+  {
+    "value": "CLP",
+    "label": "Peso Chileno"
+  },
+  {
+    "value": "EUR",
+    "label": "Euro"
+  }
+]

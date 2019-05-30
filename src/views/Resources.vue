@@ -11,6 +11,9 @@
         <a href="https://creativecommons.org/licenses/by/2.0/"> License.</a>
       </li>
       <li>Strongly based on <a href="https://plittypie.com">SplittyPie</a></li>
+      <li>
+        Currency exchange rate from <a href="https://www.amdoren.com/currency-api/">amdoren</a>
+      </li>
     </ul>
   </div>
 </template>

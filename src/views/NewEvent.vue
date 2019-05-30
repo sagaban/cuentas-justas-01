@@ -1,0 +1,174 @@
+<template>
+  <q-page>
+    <h4 class="text-center title">Nuevo evento</h4>
+    <q-separator />
+
+    <q-form ref="newEvent" @submit="onSubmit" @reset="onReset">
+      <q-input v-model="eventName" label="Nombre del nuevo evento" lazy-rules :rules="[notEmpty]" />
+
+      <q-select
+        v-model="mainCurrency"
+        :options="currencyOptions"
+        label="Moneda principal"
+        :rules="[notEmpty]"
+      >
+        <template v-slot:selected>
+          <div v-if="mainCurrency">
+            <q-chip>
+              <q-avatar>
+                <img :src="getCurrencyImage(mainCurrency.value)" />
+              </q-avatar>
+              &nbsp; {{ mainCurrency.label }}
+            </q-chip>
+          </div>
+        </template>
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
+            <q-item-section avatar>
+              <img :src="getCurrencyImage(scope.opt.value)" :alt="scope.opt.label" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label v-html="scope.opt.label" />
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+
+      <q-select
+        v-model="otherCurrencies"
+        multiple
+        :options="mainCurrency ? otherCurrenciesOptions : []"
+        use-chips
+        label="Otras monedas"
+        :disable="!mainCurrency"
+      >
+        <template v-slot:selected>
+          <div v-for="otherCurrency in otherCurrencies" :key="otherCurrency.value">
+            <q-chip>
+              <q-avatar>
+                <img :src="getCurrencyImage(otherCurrency.value)" />
+              </q-avatar>
+              &nbsp; {{ otherCurrency.label }}
+            </q-chip>
+          </div>
+        </template>
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
+            <q-item-section avatar>
+              <img :src="getCurrencyImage(scope.opt.value)" :alt="scope.opt.label" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label v-html="scope.opt.label" />
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+
+      <q-input v-model="password" label="Contraseña (Opcional)" lazy-rules type="password" />
+
+      <h5 class="text-center title">Participantes</h5>
+      <q-separator />
+
+      <div v-for="n in participantsAmount" :key="n" class="flex">
+        <q-input
+          v-model="participants[n - 1]"
+          :label="n === 1 ? 'Tu nombre' : 'El nombre de tu amigo'"
+          lazy-rules
+          :rules="[notEmpty]"
+          class="participant-input col-grow"
+        />
+        <q-btn
+          label="Eliminar"
+          color="red"
+          class="self-center"
+          @click="deleteParticipant(n)"
+          :disable="participantsAmount <= minParticipantAmount"
+        />
+      </div>
+      <q-btn
+        label="Agregar participante"
+        class="add-participant-btn full-width q-mt-md"
+        color="secondary"
+        @click="addParticipant"
+      />
+
+      <div class="flex form-buttons">
+        <q-btn label="Crear" type="submit" class="col-grow" color="primary" />
+        <q-btn label="Limpiar" type="reset" class="col-grow q-ml-sm" color="primary" flat />
+      </div>
+    </q-form>
+  </q-page>
+</template>
+
+<script>
+import { notEmpty } from '@/utils/formValidations';
+import currencies from '@/utils/currencies';
+const MIN_PARTICIPANT_AMOUNT = 2;
+
+export default {
+  name: 'PageNewEvent',
+  data() {
+    return {
+      notEmpty,
+      currencyOptions: currencies,
+      eventName: null,
+      password: null,
+      mainCurrency: null,
+      otherCurrencies: [],
+      participants: [],
+      participantsAmount: MIN_PARTICIPANT_AMOUNT,
+      minParticipantAmount: MIN_PARTICIPANT_AMOUNT,
+    };
+  },
+  computed: {
+    otherCurrenciesOptions() {
+      const mainCurrency = this.mainCurrency;
+      return this.currencyOptions.filter(c => c.value !== mainCurrency.value);
+    },
+  },
+  methods: {
+    getCurrencyImage(value) {
+      return require(`../assets/images/currencies/${value.toLowerCase()}.png`);
+    },
+    addParticipant() {
+      this.participantsAmount++;
+    },
+    deleteParticipant(n) {
+      if (this.participants.length >= n) {
+        const participants = this.participants.slice(0);
+        participants.splice(n - 1, 1);
+        this.participants = participants;
+      }
+      this.participantsAmount--;
+    },
+    onSubmit() {
+      this.$q.notify({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'fas fa-check-circle',
+        message: 'Submitted',
+      });
+    },
+    onReset() {
+      this.eventName = null;
+      this.mainCurrency = null;
+      this.otherCurrencies = [];
+    },
+  },
+};
+</script>
+
+<style>
+.q-page {
+  padding: 1rem;
+}
+.title {
+  margin: 1rem 0;
+}
+.q-item__section--avatar {
+  min-width: 0 !important;
+}
+.form-buttons {
+  margin: 1rem 0;
+}
+</style>

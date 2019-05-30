@@ -5,13 +5,7 @@
     </h1>
     <div class="text-subtitle1">Conservan la amistad</div>
 
-    <q-btn
-      fab
-      icon="add"
-      color="primary"
-      size="lg"
-      class="fixed add-event-button"
-    />
+    <q-btn fab icon="add" color="primary" size="lg" class="fixed add-event-button" to="/newEvent" />
   </q-page>
 </template>
 
@@ -20,12 +14,14 @@
   padding: 1rem;
   justify-content: flex-start;
 }
+
+/* TODO: improve the image size*/
 .page-home::after {
   background-image: url(../assets/images/piggy-bank.jpg);
   background-size: cover;
   background-position: center;
   opacity: 0.2;
-  content: "";
+  content: '';
   opacity: 0.5;
   top: 0;
   left: 0;
@@ -38,18 +34,17 @@
 .text-subtitle1 {
   font-size: 3rem;
   line-height: 3rem;
-
 }
 
 .add-event-button {
   right: 2rem;
   bottom: 2rem;
-  opacity: 1;
+  padding-top: 1rem;
 }
 </style>
 
 <script>
 export default {
-  name: "PageHome"
+  name: 'PageHome',
 };
 </script>
