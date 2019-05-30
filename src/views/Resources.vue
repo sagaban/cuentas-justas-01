@@ -39,7 +39,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'PageResources',
+};
 </script>
 
 <style></style>

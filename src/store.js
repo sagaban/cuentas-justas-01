@@ -14,9 +14,10 @@ export default new Vuex.Store({
     mainCurrency: null,
     otherCurrencies: [],
     participants: [],
+    transactions: [],
   },
   mutations: {
-    SET_NEW_EVENT(state, eventData) {
+    SET_EVENT(state, eventData) {
       state.eventId = eventData.eventId;
       state.eventName = eventData.eventName;
       state.mainCurrency = eventData.mainCurrency;
@@ -49,7 +50,7 @@ export default new Vuex.Store({
       return fb.eventCollection
         .add(event)
         .then(docRef => {
-          commit('SET_NEW_EVENT', { ...event, eventId: docRef.id });
+          commit('SET_EVENT', { ...event, eventId: docRef.id });
           return docRef.id;
         })
         .catch(function(error) {
@@ -57,6 +58,20 @@ export default new Vuex.Store({
         })
         .finally(() => {
           commit('SET_IS_LOADING', false);
+        });
+    },
+    LOAD_EVENT({ commit }, eventId) {
+      commit('SET_IS_LOADING', true);
+      return fb.eventCollection
+        .doc(eventId)
+        .get()
+        .then(doc => {
+          commit('SET_IS_LOADING', false);
+          if (doc.exists) {
+            commit('SET_EVENT', doc.data());
+          } else {
+            return Promise.reject('No existe el evento');
+          }
         });
     },
   },

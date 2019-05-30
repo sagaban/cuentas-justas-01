@@ -6,6 +6,7 @@ import About from './views/About.vue';
 import Resources from './views/Resources.vue';
 import NewEvent from './views/NewEvent.vue';
 import Event from './views/Event.vue';
+import NewTransaction from './views/NewTransaction.vue';
 
 Vue.use(Router);
 
@@ -39,6 +40,11 @@ export default new Router({
           path: '/event/:id',
           name: 'event',
           component: Event,
+        },
+        {
+          path: '/event/:id/newTransaction',
+          name: 'newTransaction',
+          component: NewTransaction,
         },
       ],
     },

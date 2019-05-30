@@ -31,6 +31,9 @@ import {
   QAvatar,
   Loading,
   Notify,
+  QTabs,
+  QTab,
+  QRouteTab,
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -59,6 +62,9 @@ Vue.use(Quasar, {
     QSeparator,
     QChip,
     QAvatar,
+    QTabs,
+    QTab,
+    QRouteTab,
   },
   directives: {},
   plugins: {

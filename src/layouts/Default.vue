@@ -11,7 +11,7 @@
           icon="menu"
         />
         <q-toolbar-title>
-          Cuentas Justas
+          {{ toolbarTitle }}
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -27,7 +27,6 @@
             <q-item-label>Home</q-item-label>
           </q-item-section>
         </q-item>
-
 
         <q-item-label header>Links esenciales</q-item-label>
         <q-item to="/about" exact>
@@ -85,6 +84,9 @@ export default {
   computed: {
     isLoading() {
       return this.$store.state.isLoading;
+    },
+    toolbarTitle() {
+      return this.$store.state.eventName || 'Cuentas Justas';
     },
   },
   watch: {

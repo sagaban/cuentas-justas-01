@@ -120,17 +120,6 @@ export default {
       minParticipantAmount: MIN_PARTICIPANT_AMOUNT,
     };
   },
-  mounted() {
-    this.eventName = 'Viaje a Chile';
-    this.mainCurrency = { value: 'ARS', label: 'Peso Argentino' };
-    this.otherCurrencies = [
-      { value: 'USD', label: 'Dolar Estadounidense' },
-      { value: 'CLP', label: 'Peso Chileno' },
-    ];
-    this.participants = ['Santiago', 'Exe', 'Diego'];
-    this.participantsAmount = 3;
-    this.password = '123456';
-  },
   computed: {
     otherCurrenciesOptions() {
       const mainCurrency = this.mainCurrency;
