@@ -1,11 +1,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { getExchangeRates } from '@/api/currency';
+
+import fb from '@/api/firebaseManager';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     isLoading: false,
+    eventId: null,
     eventName: null,
     mainCurrency: null,
     otherCurrencies: [],
@@ -13,6 +17,7 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_NEW_EVENT(state, eventData) {
+      state.eventId = eventData.eventId;
       state.eventName = eventData.eventName;
       state.mainCurrency = eventData.mainCurrency;
       state.otherCurrencies = eventData.otherCurrencies;
@@ -34,14 +39,25 @@ export default new Vuex.Store({
             return { ...c, rate: rates[i] };
           });
         } catch (e) {
+          commit('SET_IS_LOADING', false);
           return Promise.reject(e);
         }
       }
-      commit('SET_IS_LOADING', false);
 
-      //TODO: Save to firebase
+      const event = { ...eventData, otherCurrencies };
 
-      commit('SET_NEW_EVENT', { ...eventData, otherCurrencies });
+      return fb.eventCollection
+        .add(event)
+        .then(docRef => {
+          commit('SET_NEW_EVENT', { ...event, eventId: docRef.id });
+          return docRef.id;
+        })
+        .catch(function(error) {
+          return Promise.reject(error);
+        })
+        .finally(() => {
+          commit('SET_IS_LOADING', false);
+        });
     },
   },
 });

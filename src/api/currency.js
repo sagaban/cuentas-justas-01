@@ -1,15 +1,25 @@
 import axiosFactory from 'axios';
 
 const baseDomain = 'https://free.currconv.com';
-const baseURL = `${baseDomain}/api/v7/convert?compact=ultra&apiKey=${
-  process.env.VUE_APP_CURRENCY_API_TOKEN
-}&q=`;
+const baseURL = `${baseDomain}/api/v7`;
 
 const axios = axiosFactory.create({
   baseURL,
+  params: {
+    compact: 'ultra',
+    apiKey: process.env.VUE_APP_CURRENCY_API_TOKEN,
+  },
 });
 
 export const getExchangeRates = (currency, currencies) => {
-  const query = currencies.map(c => `${currency}_${c}`).join(',');
-  return axios.get(query).then(response => Object.values(response.data));
+  const q = currencies.map(c => `${currency}_${c}`).join(',');
+  return axios
+    .get('convert', {
+      params: {
+        q,
+      },
+    })
+    .then(response => {
+      return Object.values(response.data);
+    });
 };

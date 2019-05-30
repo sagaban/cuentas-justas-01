@@ -161,14 +161,16 @@ export default {
           otherCurrencies: this.otherCurrencies,
           participants: this.participants,
         })
-        .then(() => console.log('redirect'))
+        .then(eventId => {
+          this.$router.push({ name: 'event', params: { id: eventId } });
+        })
         .catch(e => {
-          this.$store.commit('SET_IS_LOADING', false);
+          console.error(e);
           this.$q.notify({
             color: 'red',
             textColor: 'white',
             icon: 'error',
-            message: 'El evento no pudo ser creado: ' + e,
+            message: 'El evento no pudo ser creado',
           });
         });
     },

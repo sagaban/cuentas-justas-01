@@ -10,7 +10,6 @@
           aria-label="Menu"
           icon="menu"
         />
-
         <q-toolbar-title>
           Cuentas Justas
         </q-toolbar-title>
@@ -19,7 +18,7 @@
 
     <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-2">
       <q-list>
-        <q-item-label header>Navigation</q-item-label>
+        <q-item-label header>Navegación</q-item-label>
         <q-item to="/" exact>
           <q-item-section avatar>
             <q-icon name="home" />
@@ -28,59 +27,41 @@
             <q-item-label>Home</q-item-label>
           </q-item-section>
         </q-item>
+
+
+        <q-item-label header>Links esenciales</q-item-label>
         <q-item to="/about" exact>
           <q-item-section avatar>
             <q-icon name="info" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>About</q-item-label>
+            <q-item-label>Sobre esta app</q-item-label>
           </q-item-section>
         </q-item>
-
-        <q-item-label header>Essential Links</q-item-label>
-        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
+        <q-item to="/resources" exact>
           <q-item-section avatar>
-            <q-icon name="school" />
+            <q-icon name="star" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Docs</q-item-label>
-            <q-item-label caption>quasar.dev</q-item-label>
+            <q-item-label>Recursos</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://github.com/quasarframework/">
+        <q-item clickable tag="a" target="_blank" href="https://github.com/sagaban/cuentas-justas">
           <q-item-section avatar>
             <q-icon name="code" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Github</q-item-label>
-            <q-item-label caption>github.com/quasarframework</q-item-label>
+            <q-item-label caption>github.com/sagaban/cuentas-justas</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://chat.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="chat" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Discord Chat Channel</q-item-label>
-            <q-item-label caption>chat.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://forum.quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="forum" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Forum</q-item-label>
-            <q-item-label caption>forum.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item clickable tag="a" target="_blank" href="https://twitter.com/quasarframework">
+        <q-item clickable tag="a" target="_blank" href="https://twitter.com/sagaban">
           <q-item-section avatar>
             <q-icon name="rss_feed" />
           </q-item-section>
           <q-item-section>
             <q-item-label>Twitter</q-item-label>
-            <q-item-label caption>@quasarframework</q-item-label>
+            <q-item-label caption>@sagaban</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
