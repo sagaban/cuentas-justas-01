@@ -97,4 +97,9 @@ export default new Vuex.Store({
         });
     },
   },
+  getters: {
+    allCurrencies(state) {
+      return [state.mainCurrency, ...state.otherCurrencies];
+    },
+  },
 });

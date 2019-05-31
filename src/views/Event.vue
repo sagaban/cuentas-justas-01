@@ -1,24 +1,40 @@
 <template>
   <q-page>
-    <q-tabs v-model="tab" dense inline-label align="justify">
-      <q-tab class="text-secondary" name="generalView" icon="mail" label="Vista General" />
-      <q-tab class="text-accent" name="transactions" icon="movie" label="Transacciones" />
-    </q-tabs>
+    <!-- TODO: Move this conditional to a more general place -->
+    <div v-if="$store.state.eventId">
+      <q-tabs v-model="tab" dense inline-label align="justify">
+        <q-tab class="text-secondary" name="generalView" icon="mail" label="Vista General" />
+        <q-tab class="text-accent" name="transactions" icon="movie" label="Transacciones" />
+      </q-tabs>
+      <div v-if="tab === 'generalView'">
+        <span class="text-subtitle1">
+          <total-expent />
+        </span>
+      </div>
+      <div v-else>
+        Transactions
+      </div>
 
-    <q-btn
-      fab
-      icon="add"
-      color="accent"
-      size="lg"
-      class="fixed add-transaction-button"
-      @click="newTransactionHandler"
-    />
+      <q-btn
+        fab
+        icon="add"
+        color="accent"
+        size="lg"
+        class="fixed add-transaction-button"
+        @click="newTransactionHandler"
+      />
+    </div>
   </q-page>
 </template>
 
 <script>
+import TotalExpent from '@/components/TotalExpent';
+
 export default {
   name: 'PageEvent',
+  components: {
+    TotalExpent,
+  },
   beforeCreate() {
     if (this.$store.state.eventId !== this.$route.params.id) {
       //TODO: redirect if not exists

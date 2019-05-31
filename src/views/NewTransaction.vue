@@ -25,7 +25,7 @@
         </template>
       </q-input>
       <div class="split-beetwen-container">
-        <span class="text-subtitle">A dividir entre:</span>
+        <span class="text-subtitle1">A dividir entre:</span>
         <div class="split-beetwen-container__options">
           <div v-for="leech in splitBeetwenOptions" :key="leech">
             <q-checkbox v-model="splitBeetwen" :val="leech" :label="leech" />
@@ -90,8 +90,7 @@ export default {
       return this.$store.state.participants;
     },
     currenciesOptions() {
-      const { mainCurrency, otherCurrencies } = this.$store.state;
-      return [mainCurrency, ...otherCurrencies];
+      return this.$store.getters.allCurrencies;
     },
     splitBeetwenOptions() {
       return this.payerOptions.filter(p => p !== this.payer);

@@ -39,6 +39,10 @@ import {
   QDate,
   QPopupProxy,
   ClosePopup,
+  QTable,
+  QTh,
+  QTr,
+  QTd,
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -74,6 +78,10 @@ Vue.use(Quasar, {
     QCheckbox,
     QDate,
     QPopupProxy,
+    QTable,
+    QTh,
+    QTr,
+    QTd,
   },
   directives: {
     ClosePopup,
