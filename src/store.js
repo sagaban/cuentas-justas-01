@@ -23,9 +23,13 @@ export default new Vuex.Store({
       state.mainCurrency = eventData.mainCurrency;
       state.otherCurrencies = eventData.otherCurrencies;
       state.participants = eventData.participants;
+      state.transactions = eventData.transactions;
     },
     SET_IS_LOADING(state, isLoading) {
       state.isLoading = isLoading;
+    },
+    ADD_TRANSACTION(state, transactionData) {
+      state.transactions = state.transactions.concat(transactionData);
     },
   },
   actions: {
@@ -45,7 +49,7 @@ export default new Vuex.Store({
         }
       }
 
-      const event = { ...eventData, otherCurrencies };
+      const event = { ...eventData, otherCurrencies, transactions: [] };
 
       return fb.eventCollection
         .add(event)
@@ -68,10 +72,28 @@ export default new Vuex.Store({
         .then(doc => {
           commit('SET_IS_LOADING', false);
           if (doc.exists) {
-            commit('SET_EVENT', doc.data());
+            commit('SET_EVENT', { ...doc.data(), eventId: doc.id });
           } else {
             return Promise.reject('No existe el evento');
           }
+        });
+    },
+    async ADD_TRANSACTION({ state, commit }, transactionData) {
+      commit('SET_IS_LOADING', true);
+      if (!state.eventId) {
+        return Promise.reject('No existe evento');
+      }
+      return fb.eventCollection
+        .doc(state.eventId)
+        .update({
+          transactions: state.transactions.concat(transactionData),
+        })
+        .then(() => {
+          commit('ADD_TRANSACTION', transactionData);
+        })
+        .finally(() => {
+          console.log('Se ejecuta esto?');
+          commit('SET_IS_LOADING', false);
         });
     },
   },

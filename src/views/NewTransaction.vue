@@ -4,9 +4,9 @@
     <q-separator />
     <q-form ref="newEvent" @submit="onSubmit">
       <!-- TODO: Make a user as selected and populate this field -->
-      <q-select v-model="payer" :options="payerOptions" label="¿Quien pagó?" />
+      <q-select v-model="payer" :options="payerOptions" label="¿Quien pagó?" :rules="[notEmpty]" />
       <q-input v-model="concept" label="¿En concepto de qué?" />
-      <q-input v-model="amount" label="¿Cuánto dolió?" type="number" />
+      <q-input v-model="amount" label="¿Cuánto dolió?" type="number" :rules="[notEmpty]" />
       <div class="q-pa-md currency-container" v-if="currenciesOptions.length > 1">
         <div v-for="currencyOption in currenciesOptions" :key="currencyOption.value">
           <q-radio v-model="currency" :val="currencyOption.value">
@@ -35,7 +35,7 @@
       <div class="flex form-buttons">
         <q-btn label="Crear" type="submit" class="col-grow" color="primary" />
         <q-btn
-          label="Cancel"
+          label="Cancelar"
           type="reset"
           class="col-grow q-ml-sm"
           @click="onCancel"
@@ -50,6 +50,8 @@
 <script>
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from '@/utils/constants';
+import { notEmpty } from '@/utils/formValidations';
+
 export default {
   name: 'PageNewTranscation',
   beforeCreate() {
@@ -73,6 +75,7 @@ export default {
   },
   data() {
     return {
+      notEmpty,
       payer: null,
       concept: null,
       amount: null,
@@ -98,8 +101,33 @@ export default {
     getCurrencyImage(value) {
       return require(`../assets/images/currencies/${value.toLowerCase()}.png`);
     },
-    onSubmit() {},
-    onCancel() {},
+    onSubmit() {
+      this.$store
+        .dispatch('ADD_TRANSACTION', {
+          payer: this.payer,
+          concept: this.concept,
+          amount: this.amount,
+          currency: this.currency,
+          splitBeetwen: this.splitBeetwen,
+          date: this.date,
+        })
+        .then(() => {
+          this.$router.push({ name: 'event', params: { id: this.$store.state.eventId } });
+        })
+        .catch(e => {
+          this.$store.commit('SET_IS_LOADING', false);
+          console.error(e);
+          this.$q.notify({
+            color: 'red',
+            textColor: 'white',
+            icon: 'error',
+            message: 'La transacción no pudo ser creada',
+          });
+        });
+    },
+    onCancel() {
+      this.$router.push({ name: 'event', params: { id: this.$store.state.eventId } });
+    },
   },
   watch: {
     payer() {
@@ -110,6 +138,9 @@ export default {
 </script>
 
 <style scoped>
+.q-page {
+  padding: 1rem;
+}
 .title {
   margin: 0.5rem 0;
 }

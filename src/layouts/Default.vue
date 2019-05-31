@@ -101,8 +101,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.q-page-container {
-  padding: 1rem;
-}
-</style>
+<style scoped></style>

@@ -155,6 +155,7 @@ export default {
           this.$router.push({ name: 'event', params: { id: eventId } });
         })
         .catch(e => {
+          this.$store.commit('SET_IS_LOADING', false);
           console.error(e);
           this.$q.notify({
             color: 'red',
@@ -177,6 +178,9 @@ export default {
 </script>
 
 <style scoped>
+.q-page {
+  padding: 1rem;
+}
 .title {
   margin: 1rem 0;
 }
