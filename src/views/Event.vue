@@ -21,6 +21,8 @@ export default {
   name: 'PageEvent',
   beforeCreate() {
     if (this.$store.state.eventId !== this.$route.params.id) {
+      //TODO: redirect if not exists
+      //TODO: Select an active user
       this.$store.dispatch('LOAD_EVENT', this.$route.params.id).catch(e => {
         this.$q.notify({
           color: 'red',

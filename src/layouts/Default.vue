@@ -42,7 +42,7 @@
             <q-icon name="star" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Recursos</q-item-label>
+            <q-item-label>Recursos / Créditos</q-item-label>
           </q-item-section>
         </q-item>
         <q-item clickable tag="a" target="_blank" href="https://github.com/sagaban/cuentas-justas">
@@ -100,3 +100,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.q-page-container {
+  padding: 1rem;
+}
+</style>

@@ -69,6 +69,7 @@
       <h5 class="text-center title">Participantes</h5>
       <q-separator />
 
+      <!-- TODO: participants name should be different -->
       <div v-for="n in participantsAmount" :key="n" class="flex">
         <q-input
           v-model="participants[n - 1]"
@@ -175,10 +176,7 @@ export default {
 };
 </script>
 
-<style>
-.q-page {
-  padding: 1rem;
-}
+<style scoped>
 .title {
   margin: 1rem 0;
 }

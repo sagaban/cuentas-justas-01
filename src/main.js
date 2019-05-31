@@ -34,6 +34,11 @@ import {
   QTabs,
   QTab,
   QRouteTab,
+  QRadio,
+  QCheckbox,
+  QDate,
+  QPopupProxy,
+  ClosePopup,
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -65,8 +70,14 @@ Vue.use(Quasar, {
     QTabs,
     QTab,
     QRouteTab,
+    QRadio,
+    QCheckbox,
+    QDate,
+    QPopupProxy,
   },
-  directives: {},
+  directives: {
+    ClosePopup,
+  },
   plugins: {
     Loading,
     Notify,
