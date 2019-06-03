@@ -7,9 +7,12 @@
         <q-tab class="text-accent" name="transactions" icon="movie" label="Transacciones" />
       </q-tabs>
       <div v-if="tab === 'generalView'">
-        <span class="text-subtitle1">
+        <div class="component-wrapper">
           <total-expent />
-        </span>
+        </div>
+        <div class="component-wrapper">
+          <individual-balance />
+        </div>
       </div>
       <div v-else>
         Transactions
@@ -29,11 +32,13 @@
 
 <script>
 import TotalExpent from '@/components/TotalExpent';
+import IndividualBalance from '@/components/IndividualBalance';
 
 export default {
   name: 'PageEvent',
   components: {
     TotalExpent,
+    IndividualBalance,
   },
   beforeCreate() {
     if (this.$store.state.eventId !== this.$route.params.id) {
@@ -72,5 +77,8 @@ export default {
   right: 2rem;
   bottom: 2rem;
   padding-top: 1rem;
+}
+.component-wrapper {
+  margin: 0.5rem;
 }
 </style>
