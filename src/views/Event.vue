@@ -13,6 +13,9 @@
         <div class="component-wrapper">
           <individual-balance />
         </div>
+        <div class="component-wrapper">
+          <debt-settlement />
+        </div>
       </div>
       <div v-else>
         Transactions
@@ -33,12 +36,14 @@
 <script>
 import TotalExpent from '@/components/TotalExpent';
 import IndividualBalance from '@/components/IndividualBalance';
+import DebtSettlement from '@/components/DebtSettlement';
 
 export default {
   name: 'PageEvent',
   components: {
     TotalExpent,
     IndividualBalance,
+    DebtSettlement,
   },
   beforeCreate() {
     if (this.$store.state.eventId !== this.$route.params.id) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="total-expent-container">
+  <div class="individual-balance-container">
     <q-table
       title="Balance Individual"
       :data="individualBalanceTableData"
