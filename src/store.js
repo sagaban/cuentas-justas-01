@@ -31,6 +31,9 @@ export default new Vuex.Store({
     ADD_TRANSACTION(state, transactionData) {
       state.transactions = state.transactions.concat(transactionData);
     },
+    UPDATE_OTHER_CURRENCIES(state, otherCurrencies) {
+      state.otherCurrencies = otherCurrencies;
+    },
   },
   actions: {
     async CREATE_EVENT({ commit }, eventData) {
@@ -92,9 +95,42 @@ export default new Vuex.Store({
           commit('ADD_TRANSACTION', transactionData);
         })
         .finally(() => {
-          console.log('Se ejecuta esto?');
           commit('SET_IS_LOADING', false);
         });
+    },
+    async UPDATE_CURRENCY({ state, commit }, currency) {
+      commit('SET_IS_LOADING', true);
+      if (!state.eventId) {
+        return Promise.reject('No existe evento');
+      }
+      const updatedCurrencies = state.otherCurrencies.map(c => {
+        if (c.value === currency.value) {
+          return currency;
+        }
+        return c;
+      });
+      return fb.eventCollection
+        .doc(state.eventId)
+        .update({
+          otherCurrencies: updatedCurrencies,
+        })
+        .then(() => {
+          commit('UPDATE_OTHER_CURRENCIES', updatedCurrencies);
+        })
+        .finally(() => {
+          commit('SET_IS_LOADING', false);
+        });
+    },
+    async AUTO_UPDATE_CURRENCY({ state, commit, dispatch }, currency) {
+      commit('SET_IS_LOADING', true);
+
+      try {
+        const rates = await getExchangeRates(state.mainCurrency.value, [currency.value]);
+        return dispatch('UPDATE_CURRENCY', { ...currency, rate: rates[0] });
+      } catch (e) {
+        commit('SET_IS_LOADING', false);
+        return Promise.reject(e);
+      }
     },
   },
   getters: {

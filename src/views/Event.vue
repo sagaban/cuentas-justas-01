@@ -8,6 +8,9 @@
       </q-tabs>
       <div v-if="tab === 'generalView'">
         <div class="component-wrapper">
+          <Currency-exchange v-if="isMultipleCurrency" />
+        </div>
+        <div class="component-wrapper">
           <total-expent />
         </div>
         <div class="component-wrapper">
@@ -37,6 +40,7 @@
 import TotalExpent from '@/components/TotalExpent';
 import IndividualBalance from '@/components/IndividualBalance';
 import DebtSettlement from '@/components/DebtSettlement';
+import CurrencyExchange from '@/components/CurrencyExchange';
 
 export default {
   name: 'PageEvent',
@@ -44,6 +48,7 @@ export default {
     TotalExpent,
     IndividualBalance,
     DebtSettlement,
+    CurrencyExchange,
   },
   beforeCreate() {
     if (this.$store.state.eventId !== this.$route.params.id) {
@@ -67,6 +72,9 @@ export default {
   computed: {
     eventId() {
       return this.$route.params.id;
+    },
+    isMultipleCurrency() {
+      return this.$store.state.otherCurrencies.length > 0;
     },
   },
   methods: {
