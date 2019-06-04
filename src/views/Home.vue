@@ -39,7 +39,7 @@
 .add-event-button {
   right: 2rem;
   bottom: 2rem;
-  padding-top: 1rem;
+  /* padding-top: 1rem; */
 }
 </style>
 

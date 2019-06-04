@@ -136,7 +136,7 @@ export default {
               ...debtorDebts[creditor],
               creditor,
               debtor,
-            })
+            });
           }, [])
         );
       }, []);

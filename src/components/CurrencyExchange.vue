@@ -152,6 +152,7 @@ export default {
   position: absolute !important;
   right: 0;
   margin-right: 0 !important;
+  border-radius: 0 3px 3px 0 !important;
 }
 .show-rate {
   display: inline-flex;

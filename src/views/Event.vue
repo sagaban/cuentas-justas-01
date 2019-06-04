@@ -21,7 +21,7 @@
         </div>
       </div>
       <div v-else>
-        Transactions
+        <transaction-list />
       </div>
 
       <q-btn
@@ -41,6 +41,7 @@ import TotalExpent from '@/components/TotalExpent';
 import IndividualBalance from '@/components/IndividualBalance';
 import DebtSettlement from '@/components/DebtSettlement';
 import CurrencyExchange from '@/components/CurrencyExchange';
+import TransactionList from '@/components/TransactionList';
 
 export default {
   name: 'PageEvent',
@@ -49,6 +50,7 @@ export default {
     IndividualBalance,
     DebtSettlement,
     CurrencyExchange,
+    TransactionList,
   },
   beforeCreate() {
     if (this.$store.state.eventId !== this.$route.params.id) {

@@ -34,6 +34,16 @@
           ></q-item-label>
         </q-item-section>
       </q-item>
+      <q-item clickable>
+        <q-item-section>
+          <q-item-label overline>Currecy flags</q-item-label>
+          <q-item-label
+            ><a href="https://icons8.com/icon/pack/flags/color">
+              Flags Color Icons
+            </a></q-item-label
+          >
+        </q-item-section>
+      </q-item>
     </q-list>
   </div>
 </template>

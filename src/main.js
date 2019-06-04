@@ -4,6 +4,9 @@ import router from './router';
 import store from './store';
 import './registerServiceWorker';
 
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+
 import './styles/quasar.styl';
 import lang from 'quasar/lang/es.js';
 import '@quasar/extras/roboto-font/roboto-font.css';
@@ -94,6 +97,7 @@ Vue.use(Quasar, {
 });
 
 Vue.config.productionTip = false;
+dayjs.locale('es'); // use loaded locale globally
 
 new Vue({
   router,

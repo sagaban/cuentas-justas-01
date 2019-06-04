@@ -5,7 +5,17 @@ import { getExchangeRates } from '@/api/currency';
 import fb from '@/api/firebaseManager';
 
 Vue.use(Vuex);
-
+/**
+ * Transaction data format:
+ * {
+ *   "amount": "150",
+ *   "concept": "Alojamiento",
+ *   "currency": "USD",
+ *   "date": "31-05-2019",
+ *   "payer": "Santiago",
+ *   "splitBeetwen": ["Exe", "Diego"]
+ * }
+ */
 export default new Vuex.Store({
   state: {
     isLoading: false,
