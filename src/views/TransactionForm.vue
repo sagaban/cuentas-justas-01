@@ -161,7 +161,7 @@ export default {
     },
     updateTransaction() {
       this.$store
-        .dispatch('UPDATE_TRANSACTIONS', {
+        .dispatch('UPDATE_TRANSACTION', {
           id: this.$route.params.transactionId,
           payer: this.payer,
           concept: this.concept,
@@ -180,7 +180,7 @@ export default {
             color: 'red',
             textColor: 'white',
             icon: 'error',
-            message: 'La transacción no pudo ser creada',
+            message: 'La transacción no pudo actualizada',
           });
         });
     },

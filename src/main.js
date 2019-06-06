@@ -47,6 +47,7 @@ import {
   QTr,
   QTd,
   QSlideItem,
+  Dialog,
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -94,6 +95,7 @@ Vue.use(Quasar, {
   plugins: {
     Loading,
     Notify,
+    Dialog,
   },
   lang: lang,
 });

@@ -113,7 +113,7 @@ export default new Vuex.Store({
           commit('SET_IS_LOADING', false);
         });
     },
-    async UPDATE_TRANSACTIONS({ state, commit }, transaction) {
+    async UPDATE_TRANSACTION({ state, commit }, transaction) {
       commit('SET_IS_LOADING', true);
       if (!state.eventId) {
         return Promise.reject('No existe evento');
@@ -133,7 +133,24 @@ export default new Vuex.Store({
           commit('SET_IS_LOADING', false);
         });
     },
-
+    async DELETE_TRANSACTION({ state, commit }, transaction) {
+      commit('SET_IS_LOADING', true);
+      if (!state.eventId) {
+        return Promise.reject('No existe evento');
+      }
+      const filteredTransactions = state.transactions.filter(t => t.id !== transaction.id);
+      return fb.eventCollection
+        .doc(state.eventId)
+        .update({
+          transactions: filteredTransactions,
+        })
+        .then(() => {
+          commit('UPDATE_TRANSACTIONS', filteredTransactions);
+        })
+        .finally(() => {
+          commit('SET_IS_LOADING', false);
+        });
+    },
     async UPDATE_CURRENCY({ state, commit }, currency) {
       commit('SET_IS_LOADING', true);
       if (!state.eventId) {

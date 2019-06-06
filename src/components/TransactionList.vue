@@ -78,7 +78,38 @@ export default {
     },
 
     deleteTransaction(transaction, { reset }) {
-      this.finalize(reset);
+      this.$q
+        .dialog({
+          title: '¿Estás eguro querés borrar esta transacción?',
+          // message: '¿Estás querés borrar esta transacción?',
+          cancel: true,
+          // persistent: true,
+        })
+        .onOk(() => {
+          this.$store
+            .dispatch('DELETE_TRANSACTION', transaction)
+            .then(() => {
+              this.$q.notify({
+                color: 'green',
+                textColor: 'white',
+                icon: 'done',
+                message: 'La transacción fue borrada',
+              });
+            })
+            .catch(e => {
+              this.$store.commit('SET_IS_LOADING', false);
+              console.error(e);
+              this.$q.notify({
+                color: 'red',
+                textColor: 'white',
+                icon: 'error',
+                message: 'La transacción no pudo ser borrada',
+              });
+            });
+        })
+        .onDismiss(() => {
+          reset();
+        });
     },
 
     finalize(reset) {
