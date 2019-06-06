@@ -46,6 +46,7 @@ import {
   QTh,
   QTr,
   QTd,
+  QSlideItem,
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -85,6 +86,7 @@ Vue.use(Quasar, {
     QTh,
     QTr,
     QTd,
+    QSlideItem,
   },
   directives: {
     ClosePopup,

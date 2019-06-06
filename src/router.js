@@ -6,7 +6,7 @@ import About from './views/About.vue';
 import Resources from './views/Resources.vue';
 import NewEvent from './views/NewEvent.vue';
 import Event from './views/Event.vue';
-import NewTransaction from './views/NewTransaction.vue';
+import TransactionForm from './views/TransactionForm.vue';
 
 Vue.use(Router);
 
@@ -37,14 +37,25 @@ export default new Router({
           component: NewEvent,
         },
         {
-          path: '/event/:id',
+          path: '/event/:eventId',
           name: 'event',
           component: Event,
         },
         {
-          path: '/event/:id/newTransaction',
+          path: '/event/:eventId/transactions',
+          name: 'transactionList',
+          component: Event,
+        },
+        {
+          path: '/event/:eventId/transactions/newTransaction',
           name: 'newTransaction',
-          component: NewTransaction,
+          component: TransactionForm,
+        },
+        {
+          path: '/event/:eventId/transactions/:transactionId',
+          name: 'editTransaction',
+          component: TransactionForm,
+          meta: { isEditTransaction: true },
         },
       ],
     },

@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { getExchangeRates } from '@/api/currency';
 
 import fb from '@/api/firebaseManager';
+import uuid from 'uuid/v1';
 
 Vue.use(Vuex);
 /**
@@ -40,6 +41,9 @@ export default new Vuex.Store({
     },
     ADD_TRANSACTION(state, transactionData) {
       state.transactions = state.transactions.concat(transactionData);
+    },
+    UPDATE_TRANSACTIONS(state, transactions) {
+      state.transactions = transactions;
     },
     UPDATE_OTHER_CURRENCIES(state, otherCurrencies) {
       state.otherCurrencies = otherCurrencies;
@@ -96,18 +100,40 @@ export default new Vuex.Store({
       if (!state.eventId) {
         return Promise.reject('No existe evento');
       }
+      const transaction = { ...transactionData, id: uuid() };
       return fb.eventCollection
         .doc(state.eventId)
         .update({
-          transactions: state.transactions.concat(transactionData),
+          transactions: state.transactions.concat(transaction),
         })
         .then(() => {
-          commit('ADD_TRANSACTION', transactionData);
+          commit('ADD_TRANSACTION', transaction);
         })
         .finally(() => {
           commit('SET_IS_LOADING', false);
         });
     },
+    async UPDATE_TRANSACTIONS({ state, commit }, transaction) {
+      commit('SET_IS_LOADING', true);
+      if (!state.eventId) {
+        return Promise.reject('No existe evento');
+      }
+      const newTransactions = state.transactions
+        .filter(t => t.id !== transaction.id)
+        .concat(transaction);
+      return fb.eventCollection
+        .doc(state.eventId)
+        .update({
+          transactions: newTransactions,
+        })
+        .then(() => {
+          commit('UPDATE_TRANSACTIONS', newTransactions);
+        })
+        .finally(() => {
+          commit('SET_IS_LOADING', false);
+        });
+    },
+
     async UPDATE_CURRENCY({ state, commit }, currency) {
       commit('SET_IS_LOADING', true);
       if (!state.eventId) {

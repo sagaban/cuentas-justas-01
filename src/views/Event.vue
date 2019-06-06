@@ -1,8 +1,8 @@
 <template>
-  <q-page>
+  <q-page class="event-page">
     <!-- TODO: Move this conditional to a more general place -->
     <div v-if="$store.state.eventId">
-      <q-tabs v-model="tab" dense inline-label align="justify">
+      <q-tabs dense :value="tab" inline-label align="justify" @input="onTabChange">
         <q-tab class="text-secondary" name="generalView" icon="mail" label="Vista General" />
         <q-tab class="text-accent" name="transactions" icon="movie" label="Transacciones" />
       </q-tabs>
@@ -53,10 +53,10 @@ export default {
     TransactionList,
   },
   beforeCreate() {
-    if (this.$store.state.eventId !== this.$route.params.id) {
+    if (this.$store.state.eventId !== this.$route.params.eventId) {
       //TODO: redirect if not exists
       //TODO: Select an active user
-      this.$store.dispatch('LOAD_EVENT', this.$route.params.id).catch(e => {
+      this.$store.dispatch('LOAD_EVENT', this.$route.params.eventId).catch(e => {
         this.$q.notify({
           color: 'red',
           textColor: 'white',
@@ -66,28 +66,46 @@ export default {
       });
     }
   },
-  data() {
-    return {
-      tab: 'generalView',
-    };
-  },
   computed: {
+    tab() {
+      return this.$route.name === 'transactionList' ? 'transactions' : 'generalView';
+    },
     eventId() {
-      return this.$route.params.id;
+      return this.$route.params.eventId;
     },
     isMultipleCurrency() {
       return this.$store.state.otherCurrencies.length > 0;
     },
   },
   methods: {
+    onTabChange(value) {
+      switch (value) {
+        case 'generalView':
+          this.$router.replace({ name: 'event', params: { id: this.eventId } });
+          break;
+        case 'transactions':
+          this.$router.replace({
+            name: 'transactionList',
+            params: { id: this.eventId },
+          });
+          break;
+
+        default:
+          break;
+      }
+      console.log({ value });
+    },
     newTransactionHandler() {
-      this.$router.push(`/event/${this.eventId}/newTransaction`);
+      this.$router.push({ name: 'newTransaction', params: { id: this.eventId } });
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.event-page {
+  padding-bottom: 7rem;
+}
 .add-transaction-button {
   right: 2rem;
   bottom: 2rem;

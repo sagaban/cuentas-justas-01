@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <p>This is an about page</p>
+    <p>Esta aplicación surgió de un viaje a Chile con Exequiel y Diego</p>
   </q-page>
 </template>
 

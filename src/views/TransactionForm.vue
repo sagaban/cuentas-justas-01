@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <h5 class="text-center title">Nueva transacción</h5>
+    <h5 class="text-center title">{{ isEditing ? 'Editar' : 'Nueva' }} transacción</h5>
     <q-separator />
     <q-form ref="newEvent" @submit="onSubmit">
       <!-- TODO: Make a user as selected and populate this field -->
@@ -33,12 +33,17 @@
         </div>
       </div>
       <div class="flex form-buttons">
-        <q-btn label="Crear" type="submit" class="col-grow" color="primary" />
+        <q-btn
+          :label="isEditing ? 'Actualizar' : 'Crear'"
+          type="submit"
+          class="col-grow"
+          color="primary"
+        />
         <q-btn
           label="Cancelar"
           type="reset"
           class="col-grow q-ml-sm"
-          @click="onCancel"
+          @click="goBack"
           color="primary"
           flat
         />
@@ -54,17 +59,24 @@ import { notEmpty } from '@/utils/formValidations';
 
 export default {
   name: 'PageNewTranscation',
-  beforeCreate() {
-    if (this.$store.state.eventId !== this.$route.params.id) {
+  created() {
+    if (this.$store.state.eventId !== this.$route.params.eventId) {
       //TODO: Move this to a mixin or something
-      this.$store.dispatch('LOAD_EVENT', this.$route.params.id).catch(e => {
-        this.$q.notify({
-          color: 'red',
-          textColor: 'white',
-          icon: 'error',
-          message: e,
+      this.$store
+        .dispatch('LOAD_EVENT', this.$route.params.eventId)
+        .then(() => {
+          this.checkEditing();
+        })
+        .catch(e => {
+          this.$q.notify({
+            color: 'red',
+            textColor: 'white',
+            icon: 'error',
+            message: e,
+          });
         });
-      });
+    } else {
+      this.checkEditing();
     }
   },
   updated() {
@@ -76,6 +88,7 @@ export default {
   data() {
     return {
       notEmpty,
+      id: null,
       payer: null,
       concept: null,
       amount: null,
@@ -95,12 +108,34 @@ export default {
     splitBeetwenOptions() {
       return this.payerOptions.filter(p => p !== this.payer);
     },
+    isEditing() {
+      return !!this.$route.params.transactionId;
+    },
   },
   methods: {
+    checkEditing() {
+      const { transactionId } = this.$route.params;
+      if (transactionId && !this.id) {
+        const transaction = this.$store.state.transactions.find(t => (t.id = transactionId));
+        this.payer = transaction.payer;
+        this.concept = transaction.concept;
+        this.amount = transaction.amount;
+        this.currency = transaction.currency;
+        this.splitBeetwen = transaction.splitBeetwen;
+        this.date = transaction.date;
+      }
+    },
     getCurrencyImage(value) {
       return require(`../assets/images/currencies/${value.toLowerCase()}.png`);
     },
     onSubmit() {
+      if (this.isEditing) {
+        this.updateTransaction();
+      } else {
+        this.addTransaction();
+      }
+    },
+    addTransaction() {
       this.$store
         .dispatch('ADD_TRANSACTION', {
           payer: this.payer,
@@ -111,7 +146,7 @@ export default {
           date: this.date,
         })
         .then(() => {
-          this.$router.push({ name: 'event', params: { id: this.$store.state.eventId } });
+          this.goBack();
         })
         .catch(e => {
           this.$store.commit('SET_IS_LOADING', false);
@@ -124,13 +159,43 @@ export default {
           });
         });
     },
-    onCancel() {
-      this.$router.push({ name: 'event', params: { id: this.$store.state.eventId } });
+    updateTransaction() {
+      this.$store
+        .dispatch('UPDATE_TRANSACTIONS', {
+          id: this.$route.params.transactionId,
+          payer: this.payer,
+          concept: this.concept,
+          amount: this.amount,
+          currency: this.currency,
+          splitBeetwen: this.splitBeetwen,
+          date: this.date,
+        })
+        .then(() => {
+          this.goBack();
+        })
+        .catch(e => {
+          this.$store.commit('SET_IS_LOADING', false);
+          console.error(e);
+          this.$q.notify({
+            color: 'red',
+            textColor: 'white',
+            icon: 'error',
+            message: 'La transacción no pudo ser creada',
+          });
+        });
+    },
+    goBack() {
+      window.history.length > 1
+        ? this.$router.go(-1)
+        : this.$router.push({ name: 'event', params: { id: this.$store.state.eventId } });
     },
   },
   watch: {
     payer() {
-      this.splitBeetwen = this.splitBeetwenOptions;
+      if (!this.isEditing || this._updateSplitFlag) {
+        this.splitBeetwen = this.splitBeetwenOptions;
+      }
+      this._updateSplitFlag = true;
     },
   },
 };
