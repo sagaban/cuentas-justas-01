@@ -50,6 +50,10 @@ import {
   QTd,
   QSlideItem,
   Dialog,
+  QDialog,
+  QCard,
+  QCardSection,
+  QCardActions,
 } from 'quasar';
 
 Vue.use(Quasar, {
@@ -90,6 +94,10 @@ Vue.use(Quasar, {
     QTr,
     QTd,
     QSlideItem,
+    QDialog,
+    QCard,
+    QCardSection,
+    QCardActions,
   },
   directives: {
     ClosePopup,

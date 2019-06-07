@@ -13,6 +13,9 @@
         <q-toolbar-title>
           {{ toolbarTitle }}
         </q-toolbar-title>
+        <q-btn flat round dense icon="share" @click="shareEventDialog = true" />
+        <!-- <q-btn flat round dense icon="edit" />
+        <q-btn flat round dense icon="delete" /> -->
       </q-toolbar>
     </q-header>
 
@@ -81,27 +84,52 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    <q-dialog v-model="shareEventDialog">
+      <q-card style="min-width: 400px">
+        <q-card-section>
+          <div class="text-h6">Compartí esta URL para acceder a este evento</div>
+        </q-card-section>
+
+        <q-card-section>
+          <!-- <q-input autofocus :value="shareUrl" readonly type="textarea" /> -->
+          <span> {{ shareUrl }} </span>
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Copiar" @click="copySahreUrl" />
+          <q-btn flat label="Cerrar" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
 <script>
 import { getStoredEventList } from '@/api/localStorage';
-
+import firebaseConfig from '../../firebase.config';
+import { copyToClipboard } from '@/utils/general';
 export default {
   name: 'LayoutDefault',
 
   data() {
     return {
       leftDrawerOpen: this.$q.platform.is.desktop,
-      eventList: []
+      eventList: [],
+      shareEventDialog: false,
     };
   },
   computed: {
     isLoading() {
       return this.$store.state.isLoading;
     },
+    eventId() {
+      return this.$route.params.eventId;
+    },
     toolbarTitle() {
       return this.$store.state.eventName || 'Cuentas Justas';
+    },
+    shareUrl() {
+      return `https://${firebaseConfig.authDomain}/event/${this.eventId}`;
     },
   },
   watch: {
@@ -112,9 +140,21 @@ export default {
         this.$q.loading.hide();
       }
     },
-    toolbarTitle() {
+    eventId() {
       this.eventList = getStoredEventList();
-    }
+    },
+  },
+  methods: {
+    copySahreUrl() {
+      copyToClipboard(this.shareUrl);
+      this.$q.notify({
+        color: 'green',
+        textColor: 'white',
+        icon: 'done',
+        message: 'URL copiada',
+      });
+      this.shareEventDialog =  false;
+    },
   },
 };
 </script>
