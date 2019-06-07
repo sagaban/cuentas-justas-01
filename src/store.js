@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { getExchangeRates } from '@/api/currency';
 
 import fb from '@/api/firebaseManager';
+import { storeEvent } from '@/api/localStorage';
 import uuid from 'uuid/v1';
 
 Vue.use(Vuex);
@@ -71,8 +72,8 @@ export default new Vuex.Store({
       return fb.eventCollection
         .add(event)
         .then(docRef => {
-          commit('SET_EVENT', { ...event, eventId: docRef.id });
-          return docRef.id;
+          commit('SET_EVENT', { ...event, id: docRef.id });
+          storeEvent({ name: eventData.eventName, id: docRef.id });
         })
         .catch(function(error) {
           return Promise.reject(error);
@@ -89,7 +90,9 @@ export default new Vuex.Store({
         .then(doc => {
           commit('SET_IS_LOADING', false);
           if (doc.exists) {
-            commit('SET_EVENT', { ...doc.data(), eventId: doc.id });
+            const event = doc.data()
+            commit('SET_EVENT', { ...event, eventId: doc.id });
+            storeEvent({ name: event.eventName, id: doc.id });
           } else {
             return Promise.reject('No existe el evento');
           }

@@ -7,6 +7,7 @@ import './registerServiceWorker';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import VueLogger from 'vuejs-logger';
+import Storage from 'vue-ls';
 
 import './styles/quasar.styl';
 import lang from 'quasar/lang/es.js';
@@ -106,7 +107,7 @@ dayjs.locale('es'); // use loaded locale globally
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-const options = {
+const loggerOptions = {
   isEnabled: true,
   logLevel: isProduction ? 'error' : 'debug',
   stringifyArguments: false,
@@ -115,7 +116,15 @@ const options = {
   separator: '|',
   showConsoleColors: true,
 };
-Vue.use(VueLogger, options);
+Vue.use(VueLogger, loggerOptions);
+
+const storageOptions = {
+  namespace: 'cj__', // key prefix
+  name: 'storage', // name variable Vue.[ls] or this.[$ls],
+  storage: 'local', // storage name session, local, memory
+};
+
+Vue.use(Storage, storageOptions);
 
 new Vue({
   router,

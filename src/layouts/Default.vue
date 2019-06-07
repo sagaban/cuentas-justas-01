@@ -28,6 +28,18 @@
           </q-item-section>
         </q-item>
 
+        <q-item-label header v-if="eventList.length">Eventos</q-item-label>
+        <div v-for="event in eventList" :key="event.id">
+          <q-item :to="`/event/${event.id}`" exact>
+            <q-item-section avatar>
+              <q-icon name="folder_open" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ event.name }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </div>
+
         <q-item-label header>Links esenciales</q-item-label>
         <q-item to="/about" exact>
           <q-item-section avatar>
@@ -73,12 +85,15 @@
 </template>
 
 <script>
+import { getStoredEventList } from '@/api/localStorage';
+
 export default {
   name: 'LayoutDefault',
 
   data() {
     return {
       leftDrawerOpen: this.$q.platform.is.desktop,
+      eventList: []
     };
   },
   computed: {
@@ -97,6 +112,9 @@ export default {
         this.$q.loading.hide();
       }
     },
+    toolbarTitle() {
+      this.eventList = getStoredEventList();
+    }
   },
 };
 </script>
