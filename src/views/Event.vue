@@ -6,7 +6,7 @@
         <q-tab class="text-secondary" name="generalView" icon="mail" label="Vista General" />
         <q-tab class="text-accent" name="transactions" icon="movie" label="Transacciones" />
       </q-tabs>
-      <div v-if="tab === 'generalView'">
+      <div v-show="tab === 'generalView'">
         <div class="component-wrapper">
           <Currency-exchange v-if="isMultipleCurrency" />
         </div>
@@ -20,7 +20,7 @@
           <debt-settlement />
         </div>
       </div>
-      <div v-else>
+      <div v-show="tab === 'transactions'">
         <transaction-list />
       </div>
 
@@ -93,7 +93,6 @@ export default {
         default:
           break;
       }
-      console.log({ value });
     },
     newTransactionHandler() {
       this.$router.push({ name: 'newTransaction', params: { id: this.eventId } });

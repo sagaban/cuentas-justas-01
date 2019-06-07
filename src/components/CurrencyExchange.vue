@@ -93,11 +93,12 @@ export default {
       return round(value * currency.rate, 3);
     },
     onEditClick(currency) {
+      const qInputElement = this.$refs[`${currency.value}-input`].find(e => e).$el;
+      const input = searchTree(qInputElement, 'INPUT');
       if (this.isCurrencyInputDisable(currency.value)) {
         this.currencyInputEnables.push(currency.value);
+        this.$nextTick(() => input.focus());
       } else {
-        const qInputElement = this.$refs[`${currency.value}-input`].find(e => e).$el;
-        const input = searchTree(qInputElement, 'INPUT');
         this.updateCurrencyRate(currency, input.value);
       }
     },
@@ -106,9 +107,11 @@ export default {
     },
     updateCurrencyRate(currency, newRate) {
       this.currencyInputEnables = this.currencyInputEnables.filter(c => c !== currency.value);
-      this.$store
-        .dispatch('UPDATE_CURRENCY', { ...currency, rate: newRate })
-        .catch(this.showErrorMessage);
+      if (currency.rate !== newRate) {
+        this.$store
+          .dispatch('UPDATE_CURRENCY', { ...currency, rate: newRate })
+          .catch(this.showErrorMessage);
+      }
     },
     onDonwloadCurrencyRateClick(currency) {
       this.$store.dispatch('AUTO_UPDATE_CURRENCY', currency).catch(this.showErrorMessage);

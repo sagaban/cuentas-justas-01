@@ -14,7 +14,7 @@ Vue.use(Vuex);
  *   "currency": "USD",
  *   "date": "31-05-2019",
  *   "payer": "Santiago",
- *   "splitBeetwen": ["Exe", "Diego"]
+ *   "splitBetween": ["Exe", "Diego"]
  * }
  */
 export default new Vuex.Store({

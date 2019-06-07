@@ -50,7 +50,7 @@
             <q-icon name="code" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Github</q-item-label>
+            <q-item-label>Repo de este proyecto</q-item-label>
             <q-item-label caption>github.com/sagaban/cuentas-justas</q-item-label>
           </q-item-section>
         </q-item>
@@ -59,7 +59,7 @@
             <q-icon name="rss_feed" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Twitter</q-item-label>
+            <q-item-label>Mi Twitter</q-item-label>
             <q-item-label caption>@sagaban</q-item-label>
           </q-item-section>
         </q-item>

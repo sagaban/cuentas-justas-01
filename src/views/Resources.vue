@@ -44,6 +44,21 @@
           >
         </q-item-section>
       </q-item>
+      <q-item clickable>
+        <q-item-section>
+          <q-item-label overline>Debt settlement</q-item-label>
+          <q-item-label>
+            <a href="http://www.settleup.info/files/master-thesis-david-vavra.pdf">
+              David Vavra's Master Thesis
+            </a>
+          </q-item-label>
+          <q-item-label>
+            <a href="https://github.com/audiowaves/subsetsum">
+              JavaScript solution for subset sum problem
+            </a>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
     </q-list>
   </div>
 </template>

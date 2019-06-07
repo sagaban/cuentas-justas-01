@@ -24,11 +24,11 @@
           </q-icon>
         </template>
       </q-input>
-      <div class="split-beetwen-container">
+      <div class="split-between-container">
         <span class="text-subtitle1">A dividir entre:</span>
-        <div class="split-beetwen-container__options">
-          <div v-for="leech in splitBeetwenOptions" :key="leech">
-            <q-checkbox v-model="splitBeetwen" :val="leech" :label="leech" />
+        <div class="split-between-container__options">
+          <div v-for="leech in splitBetweenOptions" :key="leech">
+            <q-checkbox v-model="splitBetween" :val="leech" :label="leech" />
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@ export default {
       concept: null,
       amount: null,
       currency: null,
-      splitBeetwen: [],
+      splitBetween: [],
       date: dayjs().format(DATE_FORMAT),
       dateMask: DATE_FORMAT,
     };
@@ -105,7 +105,7 @@ export default {
     currenciesOptions() {
       return this.$store.getters.allCurrencies;
     },
-    splitBeetwenOptions() {
+    splitBetweenOptions() {
       return this.payerOptions.filter(p => p !== this.payer);
     },
     isEditing() {
@@ -116,12 +116,12 @@ export default {
     checkEditing() {
       const { transactionId } = this.$route.params;
       if (transactionId && !this.id) {
-        const transaction = this.$store.state.transactions.find(t => (t.id = transactionId));
+        const transaction = this.$store.state.transactions.find(t => t.id === transactionId);
         this.payer = transaction.payer;
         this.concept = transaction.concept;
         this.amount = transaction.amount;
         this.currency = transaction.currency;
-        this.splitBeetwen = transaction.splitBeetwen;
+        this.splitBetween = transaction.splitBetween;
         this.date = transaction.date;
       }
     },
@@ -142,7 +142,7 @@ export default {
           concept: this.concept,
           amount: this.amount,
           currency: this.currency,
-          splitBeetwen: this.splitBeetwen,
+          splitBetween: this.splitBetween,
           date: this.date,
         })
         .then(() => {
@@ -167,7 +167,7 @@ export default {
           concept: this.concept,
           amount: this.amount,
           currency: this.currency,
-          splitBeetwen: this.splitBeetwen,
+          splitBetween: this.splitBetween,
           date: this.date,
         })
         .then(() => {
@@ -193,7 +193,7 @@ export default {
   watch: {
     payer() {
       if (!this.isEditing || this._updateSplitFlag) {
-        this.splitBeetwen = this.splitBeetwenOptions;
+        this.splitBetween = this.splitBetweenOptions;
       }
       this._updateSplitFlag = true;
     },
@@ -216,10 +216,10 @@ export default {
   justify-content: space-evenly;
   padding: 0.5rem;
 }
-.split-beetwen-container__options {
+.split-between-container__options {
   display: flex;
 }
-.split-beetwen-container__options > div {
+.split-between-container__options > div {
   margin-right: 1rem;
 }
 .form-buttons {

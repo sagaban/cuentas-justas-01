@@ -6,6 +6,7 @@ import './registerServiceWorker';
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
+import VueLogger from 'vuejs-logger';
 
 import './styles/quasar.styl';
 import lang from 'quasar/lang/es.js';
@@ -102,6 +103,19 @@ Vue.use(Quasar, {
 
 Vue.config.productionTip = false;
 dayjs.locale('es'); // use loaded locale globally
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+const options = {
+  isEnabled: true,
+  logLevel: isProduction ? 'error' : 'debug',
+  stringifyArguments: false,
+  showLogLevel: true,
+  showMethodName: true,
+  separator: '|',
+  showConsoleColors: true,
+};
+Vue.use(VueLogger, options);
 
 new Vue({
   router,

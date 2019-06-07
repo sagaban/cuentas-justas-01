@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import set from 'lodash-es/set';
-
+import { participantTotalExpenses } from '@/utils/algorithms';
 export default {
   name: 'totalExpent',
   computed: {
@@ -38,41 +37,11 @@ export default {
       ];
     },
     participantExpenses() {
-      const participants = this.$store.state.participants;
-      const transactions = this.$store.state.transactions;
-      const allCurrencies = this.$store.getters.allCurrencies;
-
-      const baseSpent = allCurrencies.reduce((acc, currency) => {
-        return { ...acc, [currency.value]: 0 };
-      }, {});
-
-      const baseDataStructure = participants.reduce((acc, participant) => {
-        return { ...acc, [participant]: { ...baseSpent } };
-      }, {});
-
-      /*{
-  "Santiago": {
-    "ARS": 1200,
-    "USD": 150,
-    "CLP": 0
-  },
-  "Exe": {
-    "ARS": 1200,
-    "USD": 150,
-    "CLP": 0
-  },
-  "Diego": {
-    "ARS": 1200,
-    "USD": 150,
-    "CLP": 0
-  }
-}*/
-      return transactions.reduce((acc, { payer, currency, amount }) => {
-        const accCopy = Object.assign({}, acc);
-        const previousValue = accCopy[payer][currency];
-        set(accCopy, [payer, currency], previousValue + +amount);
-        return accCopy;
-      }, baseDataStructure);
+      return participantTotalExpenses(
+        this.$store.state.participants,
+        this.$store.state.transactions,
+        this.$store.getters.allCurrencies
+      );
     },
     data() {
       const balances = this.participantExpenses;

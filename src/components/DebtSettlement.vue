@@ -11,9 +11,8 @@
 </template>
 
 <script>
-import set from 'lodash-es/set';
-import get from 'lodash-es/get';
 import { round } from '@/utils/format';
+import { participantDebtsSettlement } from '@/utils/algorithms';
 
 export default {
   name: 'debtSettlement',
@@ -68,35 +67,11 @@ export default {
       "Exe":{...}
     }*/
     participanDebts() {
-      /**
-      Transaction data structure
-      {
-        "amount": "150",
-        "concept": "Alojamiento",
-        "currency": "USD",
-        "date": "31-05-2019",
-        "payer": "Santiago",
-        "splitBeetwen": ["Exe", "Diego"]
-      }
-      */
-      const transactions = this.$store.state.transactions;
-      return transactions.reduce((acc, { payer, amount, splitBeetwen, currency }) => {
-        const accCopy = Object.assign({}, acc);
-        const splitedAmount = +amount / (splitBeetwen.length + 1);
-        splitBeetwen.forEach(participant => {
-          // Check if the payer participan has a dept with splitBeetwen participant
-          const previousDebt = get(accCopy, [payer, participant, currency], 0);
-          const debtDifference = previousDebt - splitedAmount * 2;
-          if (debtDifference > 0) {
-            set(accCopy, [payer, participant, currency], debtDifference);
-          } else {
-            // If not, just add the debt
-            const previousOwe = get(accCopy, [participant, payer, currency], 0);
-            set(accCopy, [participant, payer, currency], previousOwe + splitedAmount);
-          }
-        });
-        return accCopy;
-      }, {});
+      return participantDebtsSettlement(
+        this.$store.state.participants,
+        this.$store.state.transactions,
+        this.$store.getters.allCurrencies
+      );
     },
 
     /**

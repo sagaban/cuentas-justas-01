@@ -29,7 +29,7 @@
               >: {{ transaction.concept }}</q-item-label
             >
             <q-item-label caption
-              >{{ transaction.payer }}, {{ transaction.splitBeetwen.join(', ') }}</q-item-label
+              >{{ transaction.payer }}, {{ transaction.splitBetween.join(', ') }}</q-item-label
             >
           </q-item-section>
 

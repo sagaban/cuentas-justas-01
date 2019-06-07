@@ -1,17 +1,16 @@
 <template>
   <div class="individual-balance-container">
-    <q-table
-      title="Balance Individual"
-      :data="individualBalanceTableData"
-      :columns="columns"
-      row-key="name"
-      hide-bottom
-    />
+    <div class="table-header">
+      <h2 class="table-header--title">Balance Individual</h2>
+      <q-icon name="monetization_on" class="table-header--icon" color="secondary" />
+    </div>
+    <q-table :data="individualBalanceTableData" :columns="columns" row-key="name" hide-bottom />
   </div>
 </template>
 
 <script>
-import set from 'lodash-es/set';
+import { participantsIndividualBalance } from '@/utils/algorithms';
+
 import { round } from '@/utils/format';
 
 export default {
@@ -44,52 +43,13 @@ export default {
         ...currenciesColumn,
       ];
     },
-    /* Output structure
-    {
-      "Santiago": {
-        "ARS": -100,
-        "USD": 150,
-        "CLP": 0
-      },
-      "Exe":{...}
-    }*/
+
     participanBalances() {
-      const participants = this.$store.state.participants;
-      const transactions = this.$store.state.transactions;
-      const allCurrencies = this.$store.getters.allCurrencies;
-
-      const baseSpent = allCurrencies.reduce((acc, currency) => {
-        return { ...acc, [currency.value]: 0 };
-      }, {});
-
-      const baseDataStructure = participants.reduce((acc, participant) => {
-        return { ...acc, [participant]: { ...baseSpent } };
-      }, {});
-
-      /**
-      Transaction data structure
-      {
-        "amount": "150",
-        "concept": "Alojamiento",
-        "currency": "USD",
-        "date": "31-05-2019",
-        "payer": "Santiago",
-        "splitBeetwen": ["Exe", "Diego"]
-      }
-      */
-      return transactions.reduce((acc, { payer, currency, amount, splitBeetwen }) => {
-        const accCopy = Object.assign({}, acc);
-
-        const toSplitBeetwen = [payer, ...splitBeetwen];
-        // TODO: Fix amount type storage
-        const splitedAmount = +amount / toSplitBeetwen.length;
-        toSplitBeetwen.forEach(p => {
-          const previousValue = accCopy[p][currency];
-          const toAdd = p === payer ? splitedAmount * splitBeetwen.length : -splitedAmount;
-          set(accCopy, [p, currency], previousValue + toAdd);
-        });
-        return accCopy;
-      }, baseDataStructure);
+      return participantsIndividualBalance(
+        this.$store.state.participants,
+        this.$store.state.transactions,
+        this.$store.getters.allCurrencies
+      );
     },
 
     individualBalanceTableData() {
@@ -106,4 +66,23 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+}
+.table-header--title {
+  font-size: 1.4rem;
+  letter-spacing: 0.005em;
+  font-weight: 400;
+  display: inline;
+  line-height: 2rem;
+  margin: 0;
+}
+.table-header--icon {
+  font-size: 2rem;
+  cursor: pointer;
+}
+</style>

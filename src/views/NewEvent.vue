@@ -152,7 +152,7 @@ export default {
           participants: this.participants,
         })
         .then(eventId => {
-          this.$router.push({ name: 'event', params: { id: eventId } });
+          this.$router.push({ name: 'event', params: { eventId: eventId } });
         })
         .catch(e => {
           this.$store.commit('SET_IS_LOADING', false);
