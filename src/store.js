@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import { getExchangeRates } from '@/api/currency';
 
 import fb from '@/api/firebaseManager';
-import { storeEvent } from '@/api/localStorage';
+import { storeEvent, removeEvent } from '@/api/localStorage';
 import uuid from 'uuid/v1';
 
 Vue.use(Vuex);
@@ -18,15 +18,19 @@ Vue.use(Vuex);
  *   "splitBetween": ["Exe", "Diego"]
  * }
  */
+
+const noEventState = {
+  eventId: null,
+  eventName: null,
+  mainCurrency: null,
+  otherCurrencies: [],
+  participants: [],
+  transactions: [],
+};
 export default new Vuex.Store({
   state: {
     isLoading: false,
-    eventId: null,
-    eventName: null,
-    mainCurrency: null,
-    otherCurrencies: [],
-    participants: [],
-    transactions: [],
+    ...noEventState,
   },
   mutations: {
     SET_EVENT(state, eventData) {
@@ -36,6 +40,10 @@ export default new Vuex.Store({
       state.otherCurrencies = eventData.otherCurrencies;
       state.participants = eventData.participants;
       state.transactions = eventData.transactions;
+    },
+    // eslint-disable-next-line no-unused-vars
+    CLEAN_EVENT(state) {
+      state = { ...state, ...noEventState };
     },
     SET_IS_LOADING(state, isLoading) {
       state.isLoading = isLoading;
@@ -74,6 +82,7 @@ export default new Vuex.Store({
         .then(docRef => {
           commit('SET_EVENT', { ...event, id: docRef.id });
           storeEvent({ name: eventData.eventName, id: docRef.id });
+          return docRef.id;
         })
         .catch(function(error) {
           return Promise.reject(error);
@@ -90,7 +99,7 @@ export default new Vuex.Store({
         .then(doc => {
           commit('SET_IS_LOADING', false);
           if (doc.exists) {
-            const event = doc.data()
+            const event = doc.data();
             commit('SET_EVENT', { ...event, eventId: doc.id });
             storeEvent({ name: event.eventName, id: doc.id });
           } else {
@@ -98,6 +107,24 @@ export default new Vuex.Store({
           }
         });
     },
+    DELETE_EVENT({ commit }, eventId) {
+      commit('SET_IS_LOADING', true);
+      return fb.eventCollection
+        .doc(eventId)
+        .delete()
+        .catch(function(error) {
+          Vue.$log.error('There was an error deleting the event: ', error);
+          // The user won't be able to do much
+          return Promise.resolve();
+        })
+        .finally(() => {
+          // I have to remove them anyway
+          commit('SET_IS_LOADING', false);
+          commit('CLEAN_EVENT');
+          removeEvent(eventId);
+        });
+    },
+
     async ADD_TRANSACTION({ state, commit }, transactionData) {
       commit('SET_IS_LOADING', true);
       if (!state.eventId) {

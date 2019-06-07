@@ -189,9 +189,9 @@ export const participantDebtsSettlement = (participants, transactions, allCurren
           });
         }
       });
-      Vue.$log.debug('There are no subgroups, solving just resting debts');
-      // TODO: these are float values, compare them with a error tolerance
       if (balance.positive.length > 1) {
+        Vue.$log.debug('There are no subgroups, solving just resting debts');
+        // TODO: these are float values, compare them with a error tolerance
         let biggestCredit = balance.positive[0].amount;
         while (biggestCredit) {
           const biggestDebt = balance.negative[0];

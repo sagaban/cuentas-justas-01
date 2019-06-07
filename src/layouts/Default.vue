@@ -13,9 +13,9 @@
         <q-toolbar-title>
           {{ toolbarTitle }}
         </q-toolbar-title>
-        <q-btn flat round dense icon="share" @click="shareEventDialog = true" />
-        <!-- <q-btn flat round dense icon="edit" />
-        <q-btn flat round dense icon="delete" /> -->
+        <q-btn v-if="eventId" flat round dense icon="share" @click="shareEventDialog = true" />
+        <!-- <q-btn v-if="eventId" flat round dense icon="edit" /> -->
+        <q-btn v-if="eventId" flat round dense icon="delete" @click="deleteEvent" />
       </q-toolbar>
     </q-header>
 
@@ -27,7 +27,15 @@
             <q-icon name="home" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Home</q-item-label>
+            <q-item-label>Página principal</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/newEvent" exact>
+          <q-item-section avatar>
+            <q-icon name="add" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Nuevo Evento</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -96,8 +104,8 @@
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Copiar" @click="copySahreUrl" />
           <q-btn flat label="Cerrar" v-close-popup />
+          <q-btn flat label="Copiar" @click="copySahreUrl" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -110,7 +118,9 @@ import firebaseConfig from '../../firebase.config';
 import { copyToClipboard } from '@/utils/general';
 export default {
   name: 'LayoutDefault',
-
+  created() {
+    this.eventList = getStoredEventList();
+  },
   data() {
     return {
       leftDrawerOpen: this.$q.platform.is.desktop,
@@ -126,7 +136,10 @@ export default {
       return this.$route.params.eventId;
     },
     toolbarTitle() {
-      return this.$store.state.eventName || 'Cuentas Justas';
+      if (this.$store.state.eventName && this.eventId) {
+        return this.$store.state.eventName
+      }
+      return 'Cuentas Justas';
     },
     shareUrl() {
       return `https://${firebaseConfig.authDomain}/event/${this.eventId}`;
@@ -153,7 +166,26 @@ export default {
         icon: 'done',
         message: 'URL copiada',
       });
-      this.shareEventDialog =  false;
+      this.shareEventDialog = false;
+    },
+    deleteEvent() {
+      this.$q
+        .dialog({
+          title: '¿Realmente deseás borrar este evento?',
+          persistent: true,
+          ok: {
+            label: 'Borrar',
+            color: 'red',
+          },
+          cancel: {
+            label: 'Cancelar',
+          },
+        })
+        .onOk(() => {
+          this.$store.dispatch('DELETE_EVENT', this.eventId).then(() => {
+            this.$router.push({ name: 'home' });
+          });
+        });
     },
   },
 };

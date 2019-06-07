@@ -12,3 +12,9 @@ export const storeEvent = eventData => {
 export const getStoredEventList = () => {
   return Vue.storage.get('eventList', []);
 };
+
+export const removeEvent = eventId => {
+  const storedEventList = getStoredEventList();
+  const filteredEventList = storedEventList.filter(e => e.id !== eventId);
+  Vue.storage.set('eventList', filteredEventList);
+};

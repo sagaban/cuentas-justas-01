@@ -39,7 +39,7 @@
         multiple
         :options="mainCurrency ? otherCurrenciesOptions : []"
         use-chips
-        label="Otras monedas"
+        label="Otras monedas (Opcional)"
         :disable="!mainCurrency"
       >
         <template v-slot:selected>
@@ -64,12 +64,13 @@
         </template>
       </q-select>
 
-      <q-input v-model="password" label="Contraseña (Opcional)" lazy-rules type="password" />
+      <!-- <q-input v-model="password" label="Contraseña (Opcional)" lazy-rules type="password" /> -->
 
       <h5 class="text-center title">Participantes</h5>
       <q-separator />
 
       <!-- TODO: participants name should be different -->
+      <!-- TODO: Only letters -->
       <div v-for="n in participantsAmount" :key="n" class="flex">
         <q-input
           v-model="participants[n - 1]"
