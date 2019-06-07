@@ -58,6 +58,7 @@ export default new Router({
           component: TransactionForm,
           meta: { isEditTransaction: true },
         },
+        { path: '*', redirect: { name: 'home' } },
       ],
     },
   ],

@@ -76,7 +76,7 @@
           v-model="participants[n - 1]"
           :label="n === 1 ? 'Tu nombre' : 'El nombre de tu amigo'"
           lazy-rules
-          :rules="[notEmpty]"
+          :rules="[notEmpty, validVariable, val => unique(val, getFilteredParticipants(n))]"
           class="participant-input col-grow"
         />
         <q-btn
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { notEmpty } from '@/utils/formValidations';
+import { notEmpty, validVariable, unique } from '@/utils/formValidations';
 import currencies from '@/utils/currencies';
 const MIN_PARTICIPANT_AMOUNT = 2;
 
@@ -112,6 +112,8 @@ export default {
   data() {
     return {
       notEmpty,
+      validVariable,
+      unique,
       currencyOptions: currencies,
       eventName: null,
       password: null,
@@ -131,6 +133,9 @@ export default {
   methods: {
     getCurrencyImage(value) {
       return require(`../assets/images/currencies/${value.toLowerCase()}.png`);
+    },
+    getFilteredParticipants(n) {
+      return this.participants.filter((p, i) => i !== n - 1);
     },
     addParticipant() {
       this.participantsAmount++;

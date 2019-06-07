@@ -137,7 +137,7 @@ export default {
     },
     toolbarTitle() {
       if (this.$store.state.eventName && this.eventId) {
-        return this.$store.state.eventName
+        return this.$store.state.eventName;
       }
       return 'Cuentas Justas';
     },
