@@ -59,6 +59,16 @@
           </q-item-label>
         </q-item-section>
       </q-item>
+      <q-item clickable>
+        <q-item-section>
+          <q-item-label overline>App icon</q-item-label>
+          <q-item-label>
+            <a href="https://www.iconfinder.com/icons/730803/coin_money_pig_piggy_bank_saving_icon">
+              From Icon Finder's Kokoda user
+            </a>
+          </q-item-label>
+        </q-item-section>
+      </q-item>
     </q-list>
   </div>
 </template>
